@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styled from 'styled-components';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+
+import Home from './routes/home';
+import { routes } from './constants/routes';
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: routes.HOME,
+      element: <Home />,
+      errorElement: <div>error</div>,
+    },
+    {
+      path: routes.LAZE_LOFT,
+      element: <Home />,
+      errorElement: <div>error</div>,
+    },
+    {
+      path: routes.FUNKY_MAP,
+      element: <Home />,
+      errorElement: <div>error</div>,
+    },
+    {
+      path: routes.WHITE_PAPER,
+      element: <Home />,
+      errorElement: <div>error</div>,
+    },
+  ]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <RouterProvider router={router} />
+    </Wrapper>
   );
 }
+const Wrapper = styled.div`
+  background: #fff0da;
+  min-height: 100vh;
+`;
 
 export default App;
