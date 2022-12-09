@@ -1,26 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import logo from '../static/sol_logo.png';
-
-interface SelectWalletProps {
-  onSelect: (wallet: string) => void;
-}
-
-const wallets = ['sol', 'eth', 'btc'];
-
-function SelectWallet({ onSelect }: SelectWalletProps): JSX.Element {
-  return (
-    <StyledList>
-      {wallets.map((wallet, index) => (
-        <li key={`select_wallets_${index}`} onClick={() => onSelect(wallet)}>
-          <p>{wallet}</p> <img src={logo} alt="" />
-        </li>
-      ))}
-    </StyledList>
-  );
-}
-
+import { useWallet } from '@solana/wallet-adapter-react';
 const StyledList = styled.ul`
   background: var(--var-bgcolor);
   max-width: 400px;
@@ -54,4 +35,26 @@ const StyledList = styled.ul`
     }
   }
 `;
-export default SelectWallet;
+
+interface SelectWalletProps {
+  onSelect: () => void;
+}
+
+export default function SelectWallet({ onSelect }: SelectWalletProps): JSX.Element {
+  const { wallets, select } = useWallet();
+  return (
+    <StyledList>
+      {wallets.map((wallet, index) => (
+        <li
+          key={`select_wallets_${index}`}
+          onClick={() => {
+            select(wallet.adapter.name);
+            onSelect();
+          }}
+        >
+          <p>{wallet.adapter.name}</p> <img src={wallet.adapter.icon} alt="" />
+        </li>
+      ))}
+    </StyledList>
+  );
+}
