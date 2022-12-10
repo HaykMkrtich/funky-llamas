@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { useWallet } from '@solana/wallet-adapter-react';
+import cn from 'classnames';
 const StyledList = styled.ul`
   background: var(--var-bgcolor);
   max-width: 400px;
@@ -33,6 +34,13 @@ const StyledList = styled.ul`
       padding: 8px;
       background: var(--var-primary-text-color);
     }
+    &.not_installed {
+      color: grey;
+      opacity: 0.7;
+      img {
+        background: grey;
+      }
+    }
   }
 `;
 
@@ -48,9 +56,12 @@ export default function SelectWallet({ onSelect }: SelectWalletProps): JSX.Eleme
         <li
           key={`select_wallets_${index}`}
           onClick={() => {
-            select(wallet.adapter.name);
-            onSelect();
+            if (wallet.readyState === 'Installed') {
+              select(wallet.adapter.name);
+              onSelect();
+            }
           }}
+          className={cn({ not_installed: wallet.readyState !== 'Installed' })}
         >
           <p>{wallet.adapter.name}</p> <img src={wallet.adapter.icon} alt="" />
         </li>

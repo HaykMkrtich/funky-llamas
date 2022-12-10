@@ -104,17 +104,14 @@ const StyledModalMessage = styled('div')`
 //Styles end --------------------
 
 export default function Home(): JSX.Element {
-  const { wallet, disconnect } = useWallet();
+  const { wallet, disconnect, connecting } = useWallet();
   const [result, setResult] = useState('');
-  const [pending, setPending] = useState(false);
   const [openWalletList, setOpenWalletList] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
 
   const handleOpenWalletsList = () => {
     if (wallet) {
-      setPending(true);
       setTimeout(() => {
-        setPending(false);
         setShowAnimation(true);
       }, 2000);
     } else {
@@ -147,8 +144,7 @@ export default function Home(): JSX.Element {
   const handleEndVideo = () => {
     setTimeout(() => {
       setShowAnimation(false);
-      setResult('you win 5 sol');
-      handleSendTransaction().then((res) => console.log(res));
+      handleSendTransaction().then(() => setResult('you win 5 sol'));
     }, 1000);
     setTimeout(() => {
       setResult('');
@@ -176,8 +172,8 @@ export default function Home(): JSX.Element {
               <img src={logo} alt="" />
               <p>{el} sol</p>
 
-              <Button onClick={handleOpenWalletsList} disabled={pending}>
-                {wallet ? (pending ? 'process...' : 'open') : 'select wallet'}
+              <Button onClick={handleOpenWalletsList} disabled={connecting}>
+                {wallet ? (connecting ? 'process...' : 'open') : 'select wallet'}
               </Button>
             </div>
           </div>
